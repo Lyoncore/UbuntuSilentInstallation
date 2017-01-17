@@ -11,7 +11,7 @@ This document describes the procedures and settings to create a silent installat
 Hardware and software requirements
 * Ubuntu desktop ISO image
 * A Ubuntu 16.04+ workstation
-* A USB disk (2G min.)
+* A USB disk (4G min.)
 
 ## Create a USB disk from the Ubuntu Desktop image for TuChuck
 1. On the Ubuntu workstation, insert a USB disk which is formated to FAT32. The system will automatically mount it at /media/USER/DISKLABEL. USER will be the username on the Ubuntu workstation and DISKLABEL will be the disk name.
@@ -26,7 +26,7 @@ $ fuseiso /path/to/ubuntu.iso iso
 $ rsync --delete -avP iso/ /media/USER/DISKLABEL/
 $ fusermount -u iso
 ````
-4. Note: the USB disk will only support UEFI boot, but not legacy boot.
+4. Note: the USB disk will only support UEFI boot, but not legacy boot. All contents in the USB disk will be removed after this operation.
 
 ## Create the preseed file for silent installation
 This preseed file provide the default selections and settings to the installer.
@@ -44,14 +44,15 @@ $ cp filesystem.manifest-remove /media/USER/DISKLABEL/casper/filesystem.manifest
 Specify that installer has to load the unattended.cfg.
 ````
 $ chmod u+w /media/USER/DISKLABEL/boot/grub/grub.cfg
-$ cat grub.cfg /media/USER/DISKLABEL/boot/grub/grub.cfg
+$ cp grub.cfg /media/USER/DISKLABEL/boot/grub/grub.cfg
 ````
 
 ## Start installation
 1. Unmount and remove the USB disk from the the Ubuntu workstation
 2. Connect the USB disk to a TuChuck board
-3. Boot from this USB disk
-4. The installer will automatically complete all necessary operations
-5. The system will reboot several times and then show the desktop environment in the end.
-6. The default user is ‘ubuntu’ and the password is ‘ubuntu’.
+3. The preseed file sets the first eMMC device (/dev/mmcblk0) as the target. Remember to remove the microSD card, or the system will be installed onto the card.
+4. Boot from this USB disk
+5. The installer will automatically complete all necessary operations
+6. The system will reboot several times and then show the desktop environment in the end.
+7. The default user is ‘ubuntu’ and the password is ‘ubuntu’.
 
